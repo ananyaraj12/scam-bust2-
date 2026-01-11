@@ -8,17 +8,13 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:label="Scam Burst"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-
-        <service
-            android:name="id.flutter.flutter_background_service.BackgroundService"
-            android:foregroundServiceType="specialUse"
-            android:exported="true"
-            tools:replace="android:exported" />
 
         <activity
             android:name=".MainActivity"
@@ -40,19 +36,25 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
-        
-        <!-- Notification listener service to forward posted notifications to Flutter -->
         <service
-            android:name=".NotificationListener"
+            android:name="com.example.scam_burst.NotificationListener"
+            android:label="Scam Burst Listener"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name="id.flutter.flutter_background_service.BackgroundService"
+            android:foregroundServiceType="specialUse"
+            tools:replace="android:exported"
+            android:exported="true" />
+
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
     </application>
 
     <queries>
@@ -61,4 +63,5 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+
 </manifest>

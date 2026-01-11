@@ -1,9 +1,58 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../services/overlay_service.dart';
+import '../services/notification_listener.dart';
+import '../services/scam_processor.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  StreamSubscription<Map<String, dynamic>>? _sub;
+  final ScamProcessor _processor = ScamProcessor();
+
+  @override
+  void initState() {
+    super.initState();
+    _initProcessorAndListener();
+  }
+
+  Future<void> _initProcessorAndListener() async {
+    await _processor.init();
+    _sub = NotificationListenerService.notifications.listen((event) async {
+      final title = (event['title'] ?? '') as String;
+      final text = (event['text'] ?? '') as String;
+      final combined = [title, text].where((s) => s.isNotEmpty).join(' - ');
+      try {
+        final prob = await _processor.checkScamProbability(combined);
+        if (prob > 0.5) {
+          final shown = await OverlayService.showScamOverlay(combined);
+          if (!shown && mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Overlay permission required to show alert'),
+              action: SnackBarAction(label: 'Grant', onPressed: () async {
+                await OverlayService.requestOverlayPermission();
+              }),
+            ));
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    }, onError: (e) {});
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

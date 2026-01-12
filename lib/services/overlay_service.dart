@@ -1,53 +1,44 @@
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class OverlayService {
-  /// Request overlay permission (opens settings on Android).
+  static const MethodChannel _channel = MethodChannel('scam_overlay');
+
+  /// Request SYSTEM_ALERT_WINDOW permission
   static Future<bool> requestOverlayPermission() async {
+    if (!Platform.isAndroid) return true;
+
+    final status = await Permission.systemAlertWindow.status;
+    if (status.isGranted) return true;
+
+    final result = await Permission.systemAlertWindow.request();
+    if (result.isGranted) return true;
+
+    // If permission not granted, open system overlay settings so user can grant manually
     try {
-      final granted = await FlutterOverlayWindow.isPermissionGranted();
-      if (granted) return true;
-      final bool? result = await FlutterOverlayWindow.requestPermission();
-      return result == true;
+      const MethodChannel('scam_overlay').invokeMethod('openOverlaySettings');
     } catch (e) {
-      print('Overlay permission request error: $e');
-      return false;
+      print('Could not open overlay settings: $e');
     }
+
+    return false;
   }
 
-  /// Ensure overlay permission is granted and show a simple overlay
-  /// with the provided [content]. Returns true when the overlay was
-  /// requested successfully.
-  static Future<bool> showScamOverlay(String content) async {
+  /// Show native Android overlay (Truecaller-style)
+  static Future<void> showScamOverlay(String message) async {
     try {
-      final granted = await FlutterOverlayWindow.isPermissionGranted();
-      if (!granted) {
-        final bool ok = await requestOverlayPermission();
-        if (!ok) return false;
+      // Try to start native overlay; native will return false if permission missing
+      final res = await _channel.invokeMethod<bool>('showOverlay', {
+        'msg': message,
+      });
+
+      if (res != true) {
+        print('Native overlay refused (permission?). Opening settings.');
+        await requestOverlayPermission();
       }
-
-      // Provide a simple content string; plugin will render it in overlay.
-      await FlutterOverlayWindow.showOverlay(
-        enableDrag: true,
-        height: 300,
-        width: 350,
-        alignment: OverlayAlignment.center,
-        overlayTitle: 'Scam Alert',
-        overlayContent: content,
-        flag: OverlayFlag.defaultFlag,
-      );
-
-      return true;
     } catch (e) {
-      print('showScamOverlay error: $e');
-      return false;
-    }
-  }
-
-  static Future<void> closeOverlay() async {
-    try {
-      await FlutterOverlayWindow.closeOverlay();
-    } catch (e) {
-      print('closeOverlay error: $e');
+      print('Native overlay error: $e');
     }
   }
 }

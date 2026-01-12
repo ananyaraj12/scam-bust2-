@@ -10,11 +10,11 @@ dependencies:
     sdk: flutter
   tflite_flutter: ^0.12.1          # Runs the AI (updated for compatibility)
   # flutter_sms_receiver removed: unavailable on pub.dev
-  flutter_background_service: ^5.0.5 # Keeps app alive
+  #flutter_background_service: ^5.0.5 # Keeps app alive
   system_alert_window: 2.0.7       # Shows Red Alert Popup
-  permission_handler: ^11.0.0       # Asks for permissions
+  permission_handler: ^11.3.0     # Asks for permissions
   shared_preferences: ^2.2.0
-  flutter_overlay_window: ^0.4.3
+  # flutter_overlay_window: ^0.4.3
   notification_listener: ^1.0.2+1
   
 dev_dependencies:

@@ -1,0 +1,13 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#CCFF0000"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/scamText"
+        android:text="Scam Alert"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"/>
+</LinearLayout>

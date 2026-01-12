@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'screens/home_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await _requestAllPermissions();
-
+void main() {
   runApp(const ScamBurstApp());
-}
-
-Future<void> _requestAllPermissions() async {
-  await [Permission.sms, Permission.notification].request();
 }
 
 class ScamBurstApp extends StatelessWidget {
@@ -19,11 +10,9 @@ class ScamBurstApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Scam Burst AI',
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.red),
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }

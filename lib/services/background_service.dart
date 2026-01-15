@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
+  DartPluginRegistrant.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // REQUIRED for Android Foreground Service
   // REQUIRED for Android Foreground Service
   if (service is AndroidServiceInstance) {
     service.setAsForegroundService();
@@ -36,9 +42,6 @@ void onStart(ServiceInstance service) async {
     });
   });
 }
-
-
-
 
 // //
 // // Background service runs in isolate; handles the Agent Workflow

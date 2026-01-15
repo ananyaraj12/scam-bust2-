@@ -9,6 +9,7 @@ import '../services/scam_processor.dart';
 
 // ✅ Add these imports
 import '../localization/translator.dart';
+import 'family_circle_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -58,7 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
         if (message.isEmpty) return;
 
         try {
-          final probability = await _scamProcessor.checkScamProbability(message);
+          final probability =
+              await _scamProcessor.checkScamProbability(message);
 
           if (probability > 0.5 && _canShowOverlay()) {
             _lastOverlayShown = DateTime.now();
@@ -73,7 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool _canShowOverlay() {
-    return DateTime.now().difference(_lastOverlayShown).compareTo(_overlayCooldown) > 0;
+    return DateTime.now()
+            .difference(_lastOverlayShown)
+            .compareTo(_overlayCooldown) >
+        0;
   }
 
   @override
@@ -138,7 +143,9 @@ class _HomeScreenState extends State<HomeScreen> {
               await NotificationListenerService.openNotificationSettings();
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(Translator.t("opened_notification_settings"))),
+                  SnackBar(
+                      content:
+                          Text(Translator.t("opened_notification_settings"))),
                 );
               }
             },
@@ -163,7 +170,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await OverlayService.showScamOverlay(
@@ -173,7 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.danger,
         child: const Icon(Icons.warning),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -242,9 +247,9 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(width: 15),
         _menuItem(
           context,
-          Translator.t("safe_list"),
-          Icons.verified_user,
-          Colors.orange,
+          Translator.t("family_circle_title"),
+          Icons.family_restroom,
+          Colors.red.shade900,
         ),
       ],
     );
@@ -259,7 +264,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Expanded(
       child: Card(
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            if (title == Translator.t("family_circle_title")) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FamilyCircleScreen(),
+                ),
+              );
+            }
+          },
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(

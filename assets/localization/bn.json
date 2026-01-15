@@ -1,0 +1,14 @@
+{
+  "app_title": "স্ক্যাম বস্ট সুরক্ষা",
+  "system_active": "সিস্টেম সক্রিয় আছে",
+  "scanning_realtime": "রিয়েল টাইমে স্ক্যাম স্ক্যান করা হচ্ছে",
+  "notification_access": "নোটিফিকেশন অ্যাক্সেস",
+  "opened_notification_settings": "নোটিফিকেশন সেটিংস খোলা হয়েছে",
+  "overlay_permission": "ওভারলে অনুমতি",
+  "overlay_granted": "ওভারলে অনুমতি দেওয়া হয়েছে",
+  "overlay_not_granted": "ওভারলে অনুমতি দেওয়া হয়নি",
+  "test_scam_message": "টেস্ট স্ক্যাম মেসেজ — সাবধান থাকুন",
+  "scam_log": "স্ক্যাম লগ",
+  "safe_list": "নিরাপদ তালিকা",
+  "sos_alert_family": "SOS: পরিবারকে সতর্ক করুন"
+}

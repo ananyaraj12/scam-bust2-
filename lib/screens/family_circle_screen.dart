@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scam_burst/localization/translator.dart';
 import '../services/family_service.dart';
 
 class FamilyCircleScreen extends StatefulWidget {
@@ -31,14 +32,16 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(index != null ? 'Edit Family Member' : 'Add Family Member'),
+        title: Text(index != null
+            ? Translator.t('edit_family_member')
+            : Translator.t('add_family_member')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: _nameController,
               decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: Translator.t('name'),
                 prefixIcon: const Icon(Icons.person),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -50,7 +53,7 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
               controller: _phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
-                labelText: 'Phone Number',
+                labelText: Translator.t('phone_number'),
                 prefixIcon: const Icon(Icons.phone),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -62,11 +65,12 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(Translator.t('cancel')),
           ),
           ElevatedButton(
             onPressed: () async {
-              if (_nameController.text.isNotEmpty && _phoneController.text.isNotEmpty) {
+              if (_nameController.text.isNotEmpty &&
+                  _phoneController.text.isNotEmpty) {
                 if (index != null) {
                   await FamilyService.updateFamilyMember(
                     index,
@@ -85,7 +89,8 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
                 Navigator.pop(context);
               }
             },
-            child: Text(index != null ? 'Update' : 'Add'),
+            child: Text(
+                index != null ? Translator.t('update') : Translator.t('add')),
           ),
         ],
       ),
@@ -96,7 +101,7 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Family Circle'),
+        title: Text(Translator.t('family_circle_title')),
         backgroundColor: Colors.red.shade900,
         elevation: 0,
       ),
@@ -117,17 +122,18 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
                   Icon(Icons.group_add, size: 80, color: Colors.grey.shade400),
                   const SizedBox(height: 20),
                   Text(
-                    'No family members added',
+                    Translator.t('no_family_members_added'),
                     style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton.icon(
                     onPressed: () => _showAddDialog(),
                     icon: const Icon(Icons.add),
-                    label: const Text('Add Family Member'),
+                    label: Text(Translator.t('add_family_member')),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red.shade900,
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
                     ),
                   ),
                 ],
@@ -142,7 +148,7 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
                 child: ElevatedButton.icon(
                   onPressed: () => _showAddDialog(),
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Family Member'),
+                  label: Text(Translator.t('add_family_member')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green.shade600,
                     minimumSize: const Size(double.infinity, 50),
@@ -177,15 +183,18 @@ class _FamilyCircleScreenState extends State<FamilyCircleScreen> {
                         trailing: PopupMenuButton(
                           itemBuilder: (context) => [
                             PopupMenuItem(
-                              child: const Text('Edit'),
-                              onTap: () => _showAddDialog(index: index, member: member),
+                              child: Text(Translator.t('edit')),
+                              onTap: () =>
+                                  _showAddDialog(index: index, member: member),
                             ),
                             PopupMenuItem(
-                              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                              child: Text(Translator.t('delete'),
+                                  style: const TextStyle(color: Colors.red)),
                               onTap: () async {
                                 await FamilyService.removeFamilyMember(index);
                                 setState(() {
-                                  _familyMembers = FamilyService.getFamilyMembers();
+                                  _familyMembers =
+                                      FamilyService.getFamilyMembers();
                                 });
                               },
                             ),

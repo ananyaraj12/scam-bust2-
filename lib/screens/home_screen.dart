@@ -7,6 +7,9 @@ import '../services/overlay_service.dart';
 import '../services/notification_listener.dart';
 import '../services/scam_processor.dart';
 
+// ✅ Add these imports
+import '../localization/translator.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -18,10 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   StreamSubscription<Map<String, dynamic>>? _subscription;
   final ScamProcessor _scamProcessor = ScamProcessor();
 
-  DateTime _lastOverlayShown =
-      DateTime.fromMillisecondsSinceEpoch(0);
-  static const Duration _overlayCooldown =
-      Duration(seconds: 10);
+  DateTime _lastOverlayShown = DateTime.fromMillisecondsSinceEpoch(0);
+  static const Duration _overlayCooldown = Duration(seconds: 10);
 
   @override
   void initState() {
@@ -46,21 +47,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _startNotificationListener() {
-    _subscription =
-        NotificationListenerService.notifications.listen(
+    _subscription = NotificationListenerService.notifications.listen(
       (event) async {
         if (!mounted) return;
 
         final title = (event['title'] ?? '') as String;
         final text = (event['text'] ?? '') as String;
 
-        final message =
-            [title, text].where((e) => e.isNotEmpty).join(' - ');
+        final message = [title, text].where((e) => e.isNotEmpty).join(' - ');
         if (message.isEmpty) return;
 
         try {
-          final probability =
-              await _scamProcessor.checkScamProbability(message);
+          final probability = await _scamProcessor.checkScamProbability(message);
 
           if (probability > 0.5 && _canShowOverlay()) {
             _lastOverlayShown = DateTime.now();
@@ -75,16 +73,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool _canShowOverlay() {
-    return DateTime.now()
-        .difference(_lastOverlayShown)
-        .compareTo(_overlayCooldown) >
-        0;
+    return DateTime.now().difference(_lastOverlayShown).compareTo(_overlayCooldown) > 0;
   }
 
   @override
   void dispose() {
     _subscription?.cancel();
     super.dispose();
+  }
+
+  /* ---------------- LANGUAGE SWITCH ---------------- */
+
+  void _setLanguage(String langCode) {
+    Translator.setLang(langCode).then((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   /* ---------------- UI ---------------- */
@@ -94,45 +97,83 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("SCAM BURST PROTECT"),
+        title: Text(Translator.t("app_title")),
         backgroundColor: AppColors.primary,
         centerTitle: true,
         actions: [
+          // ✅ Language Dropdown (Hindi / Bengali / Odia)
+          DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: Translator.currentLang,
+              icon: const Icon(Icons.language, color: Colors.white),
+              dropdownColor: AppColors.primary,
+              items: const [
+                DropdownMenuItem(
+                  value: "en",
+                  child: Text("English", style: TextStyle(color: Colors.white)),
+                ),
+                DropdownMenuItem(
+                  value: "hi",
+                  child: Text("Hindi", style: TextStyle(color: Colors.white)),
+                ),
+                DropdownMenuItem(
+                  value: "bn",
+                  child: Text("Bengali", style: TextStyle(color: Colors.white)),
+                ),
+                DropdownMenuItem(
+                  value: "or",
+                  child: Text("Odia", style: TextStyle(color: Colors.white)),
+                ),
+              ],
+              onChanged: (value) {
+                if (value != null) _setLanguage(value);
+              },
+            ),
+          ),
+
           IconButton(
-            tooltip: 'Notification access',
+            tooltip: Translator.t("notification_access"),
             icon: const Icon(Icons.notifications_active),
             onPressed: () async {
               await NotificationListenerService.openNotificationSettings();
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Opened notification access settings'),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(Translator.t("opened_notification_settings"))),
+                );
               }
             },
           ),
           IconButton(
-            tooltip: 'Overlay permission',
+            tooltip: Translator.t("overlay_permission"),
             icon: const Icon(Icons.layers),
             onPressed: () async {
               final granted = await OverlayService.requestOverlayPermission();
               if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(granted ? 'Overlay permission granted' : 'Overlay permission not granted'),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      granted
+                          ? Translator.t("overlay_granted")
+                          : Translator.t("overlay_not_granted"),
+                    ),
+                  ),
+                );
               }
             },
           ),
         ],
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await OverlayService.showScamOverlay(
-            "TEST SCAM MESSAGE — BE CAREFUL",
+            Translator.t("test_scam_message"),
           );
         },
         backgroundColor: AppColors.danger,
         child: const Icon(Icons.warning),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -172,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 15),
           Text(
-            "SYSTEM ACTIVE",
+            Translator.t("system_active"),
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -180,9 +221,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 6),
-          const Text(
-            "Scanning for scams in real-time",
-            style: TextStyle(color: Colors.grey),
+          Text(
+            Translator.t("scanning_realtime"),
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),
@@ -194,14 +235,14 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _menuItem(
           context,
-          "Scam Log",
+          Translator.t("scam_log"),
           Icons.history,
           Colors.blue,
         ),
         const SizedBox(width: 15),
         _menuItem(
           context,
-          "Safe List",
+          Translator.t("safe_list"),
           Icons.verified_user,
           Colors.orange,
         ),
@@ -255,9 +296,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Icons.phone_android,
           color: Colors.white,
         ),
-        label: const Text(
-          "SOS: ALERT FAMILY",
-          style: TextStyle(
+        label: Text(
+          Translator.t("sos_alert_family"),
+          style: const TextStyle(
             fontSize: 20,
             color: Colors.white,
           ),

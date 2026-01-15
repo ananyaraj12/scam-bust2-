@@ -1,0 +1,14 @@
+{
+  "app_title": "ସ୍କାମ୍ ବଷ୍ଟ ସୁରକ୍ଷା",
+  "system_active": "ସିଷ୍ଟମ୍ ସକ୍ରିୟ ଅଛି",
+  "scanning_realtime": "ରିଅଲ୍-ଟାଇମ୍ ରେ ଠକେଇ ସ୍କାନ୍ କରୁଛି",
+  "notification_access": "ନୋଟିଫିକେସନ୍ ଅନୁମତି",
+  "opened_notification_settings": "ନୋଟିଫିକେସନ୍ ସେଟିଂସ୍ ଖୋଲାଗଲା",
+  "overlay_permission": "ଓଭରଲେ ଅନୁମତି",
+  "overlay_granted": "ଓଭରଲେ ଅନୁମତି ଦିଆଗଲା",
+  "overlay_not_granted": "ଓଭରଲେ ଅନୁମତି ମିଳିଲା ନାହିଁ",
+  "test_scam_message": "ଟେଷ୍ଟ ସ୍କାମ୍ ସନ୍ଦେଶ — ସତର୍କ ରୁହନ୍ତୁ",
+  "scam_log": "ଠକେଇ ଲଗ୍",
+  "safe_list": "ସୁରକ୍ଷିତ ତାଲିକା",
+  "sos_alert_family": "SOS: ପରିବାରକୁ ସଚେତନ କରନ୍ତୁ"
+}

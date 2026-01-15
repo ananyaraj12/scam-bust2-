@@ -1,0 +1,14 @@
+{
+  "app_title": "स्कैम बस्ट प्रोटेक्ट",
+  "system_active": "सिस्टम सक्रिय है",
+  "scanning_realtime": "रियल-टाइम में स्कैम स्कैन हो रहा है",
+  "notification_access": "नोटिफिकेशन एक्सेस",
+  "opened_notification_settings": "नोटिफिकेशन सेटिंग्स खुल गईं",
+  "overlay_permission": "ओवरले अनुमति",
+  "overlay_granted": "ओवरले अनुमति मिल गई",
+  "overlay_not_granted": "ओवरले अनुमति नहीं मिली",
+  "test_scam_message": "टेस्ट स्कैम मैसेज — सावधान रहें",
+  "scam_log": "स्कैम लॉग",
+  "safe_list": "सेफ लिस्ट",
+  "sos_alert_family": "SOS: परिवार को अलर्ट करें"
+}

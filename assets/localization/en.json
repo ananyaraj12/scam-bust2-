@@ -1,0 +1,14 @@
+{
+  "app_title": "SCAM BUST PROTECT",
+  "system_active": "SYSTEM ACTIVE",
+  "scanning_realtime": "Scanning for scams in real-time",
+  "notification_access": "Notification access",
+  "opened_notification_settings": "Opened notification access settings",
+  "overlay_permission": "Overlay permission",
+  "overlay_granted": "Overlay permission granted",
+  "overlay_not_granted": "Overlay permission not granted",
+  "test_scam_message": "TEST SCAM MESSAGE — BE CAREFUL",
+  "scam_log": "Scam Log",
+  "safe_list": "Safe List",
+  "sos_alert_family": "SOS: ALERT FAMILY"
+}

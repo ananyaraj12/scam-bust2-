@@ -1,13 +1,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#CCFF0000"
-    android:padding="16dp"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#FFCC0000"
+    android:orientation="vertical"
+    android:padding="20dp">
 
+    <!-- Warning Icon -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="⚠️"
+        android:textSize="48sp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SCAM ALERT!"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="12dp"/>
+
+    <!-- Scam Message -->
     <TextView
         android:id="@+id/scamText"
-        android:text="Scam Alert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Potential scam detected"
         android:textColor="#FFFFFF"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:gravity="center"
+        android:paddingBottom="20dp"/>
+
+    <!-- Buttons Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- I Understand Button -->
+        <Button
+            android:id="@+id/btnDismiss"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="I Understand"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#CC000000"
+            android:textStyle="bold"/>
+
+        <!-- Contact Family Circle Button -->
+        <Button
+            android:id="@+id/btnCallFamily"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Contact Family"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FF006600"
+            android:textStyle="bold"/>
+    </LinearLayout>
 </LinearLayout>

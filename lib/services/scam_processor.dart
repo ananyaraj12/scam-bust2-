@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 class ScamProcessor {
   // Your ngrok base URL (no /predict here)
-  final String _baseUrl = "https://transdiurnal-hilma-agreeably.ngrok-free.dev";
+  final String _baseUrl =
+      "https://uncavalierly-premonitory-alfonso.ngrok-free.dev";
 
   Future<void> init() async {
     print("FastAPI Scam Processor Initialized");
@@ -17,30 +18,44 @@ class ScamProcessor {
         return 0.0;
       }
 
+      final payload = {
+        "text": text,
+        "modality": "text",
+      };
+
+      print("📤 [ScamProcessor] Sending to API: ${json.encode(payload)}");
+
       final response = await http
           .post(
-            Uri.parse("$_baseUrl/predict"), // ✅ Correct endpoint
+            Uri.parse("$_baseUrl/predict"),
             headers: {"Content-Type": "application/json"},
-            body: json.encode({
-              "text": text,
-              "modality": "text", // ✅ Added as per Swagger schema
-            }),
+            body: json.encode(payload),
           )
           .timeout(const Duration(seconds: 10));
+
+      print("📥 [ScamProcessor] Response status: ${response.statusCode}");
+      print("📥 [ScamProcessor] Response body: ${response.body}");
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 
-        double score = (data['probability'] ?? 0.0).toDouble();
-        print("[ScamProcessor] Analysis result: $score");
+        // API returns: {"label":"scam","is_scam":1,"confidence":0.939,"risk_level":"HIGH"}
+        // Use confidence as the probability score
+        double score = (data['confidence'] ?? 0.0).toDouble();
+        int isScam = (data['is_scam'] ?? 0);
+
+        print(
+            "✅ [ScamProcessor] Parsed response: is_scam=$isScam, confidence=$score");
+
+        // Return confidence score (0.0 to 1.0)
         return score;
       } else {
-        print("[ScamProcessor] Server Error: ${response.statusCode}");
-        print("[ScamProcessor] Response Body: ${response.body}");
+        print("❌ [ScamProcessor] Server Error: ${response.statusCode}");
+        print("❌ [ScamProcessor] Response Body: ${response.body}");
         return 0.0;
       }
     } catch (e) {
-      print("[ScamProcessor] Network Error: $e");
+      print("❌ [ScamProcessor] Network Error: $e");
       return 0.0;
     }
   }

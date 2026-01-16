@@ -10,8 +10,13 @@ class NotificationListenerService {
 
   /// 🔥 STATIC stream (this fixes your error)
   static Stream<Map<String, dynamic>> get notifications {
+    print(
+        "📡 [NotificationListener] Stream getter called - creating broadcast stream");
     return _eventChannel.receiveBroadcastStream().map((event) {
-      return Map<String, dynamic>.from(event as Map);
+      print("📨 [NotificationListener] Raw event received: $event");
+      final mapped = Map<String, dynamic>.from(event as Map);
+      print("📨 [NotificationListener] Mapped event: $mapped");
+      return mapped;
     });
   }
 

@@ -19,9 +19,11 @@ class NotificationListener : NotificationListenerService() {
         intent.putExtra("package", sbn.packageName)
         intent.putExtra("title", title)
         intent.putExtra("text", text)
+        intent.setPackage(packageName) // 🔥 Ensure broadcast stays within app
 
         Log.d("NotificationListener", "broadcasting notification title=$title text=$text")
-        // 🔥 THIS IS THE MOST IMPORTANT LINE
+        // Send broadcast with explicit package
         sendBroadcast(intent)
+        Log.d("NotificationListener", "broadcast sent successfully")
     }
 }

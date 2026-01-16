@@ -48,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _startNotificationListener() {
+    print("🎧 [HomeScreen] Starting notification listener...");
     _subscription = NotificationListenerService.notifications.listen(
       (event) async {
         if (!mounted) return;
@@ -58,20 +59,36 @@ class _HomeScreenState extends State<HomeScreen> {
         final message = [title, text].where((e) => e.isNotEmpty).join(' - ');
         if (message.isEmpty) return;
 
+        print("🔔 [HomeScreen] Processing notification: '$message'");
+
         try {
           final probability =
               await _scamProcessor.checkScamProbability(message);
 
-          if (probability > 0.5 && _canShowOverlay()) {
-            _lastOverlayShown = DateTime.now();
-            await OverlayService.showScamOverlay(message);
+          print(
+              "📊 [HomeScreen] Scam probability: $probability (threshold: 0.5)");
+
+          if (probability > 0.5) {
+            if (_canShowOverlay()) {
+              print("⚠️ [HomeScreen] SCAM DETECTED! Showing overlay...");
+              _lastOverlayShown = DateTime.now();
+              await OverlayService.showScamOverlay(message);
+            } else {
+              print("⏳ [HomeScreen] Scam detected but overlay on cooldown");
+            }
+          } else {
+            print("✅ [HomeScreen] Message appears safe");
           }
-        } catch (_) {
-          // Fail silently (background-safe)
+        } catch (e) {
+          print("❌ [HomeScreen] Error processing notification: $e");
         }
       },
-      onError: (_) {},
+      onError: (e) {
+        print("❌ [HomeScreen] Notification listener error: $e");
+      },
     );
+    print(
+        "✅ [HomeScreen] Notification listener subscription created successfully");
   }
 
   bool _canShowOverlay() {
